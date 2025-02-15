@@ -35,7 +35,7 @@ class Environ:
 
 def set_logging_config():
     logging.basicConfig(
-        filename="logger.log",
+        filename="./.local/logger.log",
         filemode='a',
         format='%(asctime)s,%(msecs)d - %(name)s - %(levelname)s: %(message)s',
         datefmt='%H:%M:%S',

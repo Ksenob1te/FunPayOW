@@ -5,8 +5,19 @@ services:
         dockerfile: Dockerfile_main
     restart: always
     volumes:
-      - ${PWD}/logger.log:/usr/src/funpayow/logger.log
-      - ${PWD}/alembic/versions:/usr/src/funpayow/alembic/versions
+      - ./.local:/usr/src/funpayow/.local
+      - ./alembic/versions:/usr/src/funpayow/alembic/versions
+    env_file:
+      - ./.env
+
+  funpayow_scrap:
+    build:
+      context: .
+      dockerfile: Dockerfile_scrap
+    restart: always
+    volumes:
+      - ./.local:/usr/src/funpayow/.local
+      - ./alembic/versions:/usr/src/funpayow/alembic/versions
     env_file:
       - ./.env
 
@@ -16,7 +27,9 @@ services:
     shm_size: 128mb
     volumes:
       - ./database:/var/lib/postgresql/data
+    env_file:
+      - ./.env
     environment:
       POSTGRES_DB: "funpayow"
       POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "random_password"
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
