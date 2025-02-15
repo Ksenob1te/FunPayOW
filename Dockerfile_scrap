@@ -1,0 +1,17 @@
+FROM ubuntu:latest
+RUN apt-get install -y python3.12 python3.12-dev python3-pip
+
+WORKDIR /usr/src/funpayow
+COPY requirements.txt .
+ENV PYTHONPATH="/usr/src/funpayow"
+RUN pip install -r requirements.txt
+COPY . .
+
+RUN apt-get update && apt-get -y install cron
+
+COPY cronfile /etc/cron.d/cronfile
+RUN chmod 0644 /etc/cron.d/cronfile
+RUN crontab /etc/cron.d/cronfile
+RUN touch /var/log/cron.log
+
+CMD cron && tail -f /var/log/cron.log

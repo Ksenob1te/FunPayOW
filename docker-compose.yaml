@@ -1,0 +1,22 @@
+services:
+  funpayow:
+    build:
+        context: .
+        dockerfile: Dockerfile_main
+    restart: always
+    volumes:
+      - ${PWD}/logger.log:/usr/src/funpayow/logger.log
+      - ${PWD}/alembic/versions:/usr/src/funpayow/alembic/versions
+    env_file:
+      - ./.env
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    shm_size: 128mb
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "funpayow"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "random_password"
