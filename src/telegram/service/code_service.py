@@ -111,7 +111,8 @@ class CodeService:
         for code in all_codes:
             if code.status == "resolved" and code.code not in codes_onsale:
                 code.status = "sold"
-                await self.user_repository.add_balance(code.user, price)
+                money_addition = price - 20 if price > 550 else price - 10
+                await self.user_repository.add_balance(code.user, money_addition)
                 code_text = f"<code>{code.code[:9] + "..."}</code>"
                 await bot.send_message(code.user.chat_id, text=f"✅ Code ({code_text}) is sold\nBalance: {code.user.balance}")
             elif code.status == "unresolved" and code.code in codes_onsale:
