@@ -9,6 +9,8 @@ from src.telegram.exceptions import (
     )
 
 import logging
+from uuid import UUID
+
 
 class UserService:
     user_field: User = None
@@ -56,4 +58,25 @@ class UserService:
 
     async def get_full_name(self, user: User) -> str:
         return await self.user_repository.get_full_name(user)
+
+    async def get_name(self, user: User) -> str:
+        name = await self.user_repository.get_full_name(user)
+        if name is None:
+            name = user.username
+        if name is None:
+            name = user.chat_id
+        return name
+
+    async def get_all(self) -> list:
+        return await self.user_repository.get_all()
+
+    async def get_from_id(self, user_id: UUID) -> User:
+        return await self.user_repository.get_by_id(user_id)
+
+    @staticmethod
+    async def get_balance(user: User) -> int:
+        return user.balance
+
+    async def make_payment(self, user: User, value: int) -> User:
+        return await self.user_repository.add_balance(user, -value)
 

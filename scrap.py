@@ -2,6 +2,7 @@ from src.scrap.account import Account
 from src.database import sessionmanager
 from src.telegram.service import StaticService, CodeService
 import logging
+from src.telegram import bot
 import asyncio
 
 
@@ -20,7 +21,7 @@ async def get_info():
         lot_fields = account.get_lot_fields(lot_id)
 
         code_service: CodeService = CodeService(session)
-        await code_service.update_codes(lot_fields.get_products(), int(lot_fields.price))
+        await code_service.update_codes(lot_fields.get_products(), int(lot_fields.price), bot)
 
 
 if __name__ == "__main__":
